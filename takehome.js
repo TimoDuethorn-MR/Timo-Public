@@ -2,6 +2,7 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var fetch = require("node-fetch");
+var cors = require('cors');
 
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
@@ -37,14 +38,11 @@ const options = {
 }
 
 var output;
-// var testoutput = {"id":"1","type":"tiles"};
 
 fetch(URL, options)
 .then(res => res.json())
 .then((data) => {console.log(data),output = data})
 .catch(console.error);
-
-// setTimeout(() => console.log(output), 3000);
 
 // The root provides a resolver function for each API endpoint
 var root = {
@@ -54,10 +52,11 @@ var root = {
 };
 
 var app = express();
-app.use('/takehome', graphqlHTTP({
+app.use(cors());
+app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
   graphiql: true,
 }));
 app.listen(5000);
-console.log('Running a GraphQL API server at localhost:5000/takehome');
+console.log('Running a GraphQL API server at http://localhost:5000/graphql');
