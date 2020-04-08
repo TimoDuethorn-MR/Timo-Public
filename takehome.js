@@ -19,6 +19,7 @@ var schema = buildSchema(`
   type Attributes {
     name: String
     url: String
+    currentTileUrl: String
     tileImage: URL
   }
 
